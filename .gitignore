@@ -22,3 +22,6 @@ front/.vscode/*
 *.njsproj
 *.sln
 *.sw?
+
+contracts-dist
+coverage
