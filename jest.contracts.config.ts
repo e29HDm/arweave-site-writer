@@ -104,7 +104,7 @@ export default {
 
   // Run tests from one or more projects
   // projects: undefined,
-  "projects": ["<rootDir>/backend"]
+  "projects": ["<rootDir>/backend"],
 
   // Use this configuration option to add custom reporters to Jest
   // reporters: undefined,
@@ -193,4 +193,6 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  detectOpenHandles:true,
 };

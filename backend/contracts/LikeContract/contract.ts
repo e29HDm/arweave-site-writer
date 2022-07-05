@@ -1,5 +1,5 @@
 
-import { ContractResult, PstAction, PstState } from './types';
+import {ContractResult, LikeAction, LikeState, LikeState} from './types';
 import {like} from "./actions/write/like";
 import {dislike} from "./actions/write/dislike";
 import {get_likes_count} from "./actions/read/get_likes_count";
@@ -7,7 +7,7 @@ import {get_dislikes_count} from "./actions/read/get_dislikes_count";
 
 declare const ContractError;
 
-export async function handle(state: PstState, action: PstAction): Promise<ContractResult> {
+export async function handle(state: LikeState, action: LikeAction): Promise<ContractResult> {
     const input = action.input;
 
     switch (input.function) {

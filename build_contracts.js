@@ -1,12 +1,13 @@
-const { build: build_contracts } = require('esbuild');
+const { build } = require('esbuild');
 const replace = require('replace-in-file');
 
-const contracts = ['/contracts/LikeContract/contract.ts'];
+const contracts = ['/LikeContract/contract.ts'];
 
-build_contracts({
+build({
     entryPoints: contracts.map((source) => {
-        return `./backend${source}`;
+        return `./backend/contracts${source}`;
     }),
+    outbase: './backend/contracts',
     outdir: './contracts-dist',
     minify: false,
     bundle: true,

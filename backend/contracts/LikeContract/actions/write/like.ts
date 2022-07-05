@@ -1,7 +1,7 @@
-import { ContractResult, PstState } from '../../types';
+import { ContractResult, LikeState } from '../../types';
 
 export const like = async (
-    state: PstState,
+    state: LikeState,
 ): Promise<ContractResult> => {
     state.likes_count += 1;
     return { state };
