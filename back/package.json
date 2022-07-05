@@ -1,0 +1,19 @@
+{
+  "name": "site-writer-contracts",
+  "version": "0.0.1",
+  "description": "arweave smartcontracts for blog management",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e29HDm/arweave-site-writer.git"
+  },
+  "author": "e29HDm",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/e29HDm/arweave-site-writer/issues"
+  },
+  "homepage": "https://github.com/e29HDm/arweave-site-writer#readme"
+}
