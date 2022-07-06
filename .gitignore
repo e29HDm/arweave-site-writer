@@ -23,5 +23,5 @@ front/.vscode/*
 *.sln
 *.sw?
 
-contracts-dist
+dist-contracts
 coverage

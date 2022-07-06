@@ -25,7 +25,7 @@ export async function runArLocalAndCreateContract(contractSourcePath: string, in
     let arlocal: ArLocal;
     let contract: Contract<LikeState>;
 
-    arlocal = new ArLocal(1820);
+    arlocal = new ArLocal(1820, false);
     await arlocal.start();
 
     arweave = Arweave.init({
