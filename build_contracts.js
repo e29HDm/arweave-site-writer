@@ -3,12 +3,15 @@ const replace = require('replace-in-file');
 
 const contracts = ['/LikeContract/contract.ts'];
 
+const distFolder = './dist-contracts';
+const baseSourceFolder = './backend/contracts';
+
 build({
     entryPoints: contracts.map((source) => {
-        return `./backend/contracts${source}`;
+        return `${baseSourceFolder}${source}`;
     }),
-    outbase: './backend/contracts',
-    outdir: './contracts-dist',
+    outbase: baseSourceFolder,
+    outdir: distFolder,
     minify: false,
     bundle: true,
     format: 'iife',
@@ -18,7 +21,7 @@ build({
     // update: it does since 0.4.31, but because viewblock.io is still incompatibile with this version, leaving as is for now.
     .finally(() => {
         const files = contracts.map((source) => {
-            return `./contracts-dist${source}`.replace('.ts', '.js');
+            return `.${distFolder}${source}`.replace('.ts', '.js');
         });
         replace.sync({
             files: files,

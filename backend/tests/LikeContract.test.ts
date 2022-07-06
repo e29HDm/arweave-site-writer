@@ -6,7 +6,7 @@ import {initial_state} from "../contracts/LikeContract/initial_state";
 
 
 describe('Testing the Like Contract', function () {
-    let contractSourcePath: string = '../../contracts-dist/LikeContract/contract.js';
+    let contractSourcePath: string = '../../dist-contracts/LikeContract/contract.js';
     let initialState: LikeState = initial_state();
     let arlocal: ArLocal;
     let contract: Contract<LikeState>;
