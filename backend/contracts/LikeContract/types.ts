@@ -1,6 +1,6 @@
-import {Contract} from "warp-contracts";
+import {InitialState} from "../InitialState";
 
-export interface LikeState {
+export interface LikeState extends InitialState {
     likes_count: number;
     dislikes_count:number;
 }
