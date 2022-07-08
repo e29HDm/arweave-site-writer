@@ -1,21 +1,19 @@
-import { Contract, LoggerFactory, Warp, WarpNodeFactory } from "warp-contracts";
+import { Contract } from "warp-contracts";
 import { InitialState } from "../../contracts/InitialState";
 import { LikeState } from "../../contracts/LikeContract/types";
 import { Wallet } from "../Wallet/Wallet";
 import { ArweaveService } from "./ArweaveService";
-import { TestContractDeployer } from "../ContractDeployer/TestContractDeployer";
+import { TestContractDeployer } from "../Deployer/TestContractDeployer";
 
 export class ArweaveTestingService {
   private readonly contractSrcPath: string;
   private readonly _initialState: InitialState;
   private readonly _arweaveService: ArweaveService;
-  private readonly _warp: Warp;
 
   constructor(contractSourcePath: string, initialState: InitialState) {
     this.contractSrcPath = contractSourcePath;
     this._initialState = initialState;
     this._arweaveService = new ArweaveService();
-    this._warp = WarpNodeFactory.forTesting(this._arweaveService.arweave);
     this._contract = undefined;
   }
 
@@ -37,26 +35,13 @@ export class ArweaveTestingService {
     return this._contract;
   }
 
-  get initialState(): InitialState {
-    return this._initialState;
-  }
-
   get arweaveService(): ArweaveService {
     return this._arweaveService;
   }
 
-  get warp(): Warp {
-    return this._warp;
-  }
-
   async init(): Promise<void> {
-    LoggerFactory.INST.logLevel("error");
     this._wallet = await this._arweaveService.createWallet();
     await this.deployContract();
-  }
-
-  async mineBlock(): Promise<void> {
-    await this._arweaveService.mineBlock();
   }
 
   private async deployContract(): Promise<void> {

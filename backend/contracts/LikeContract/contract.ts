@@ -3,7 +3,8 @@ import { like } from "./actions/write/like";
 import { dislike } from "./actions/write/dislike";
 import { get_likes_count } from "./actions/read/get_likes_count";
 import { get_dislikes_count } from "./actions/read/get_dislikes_count";
-import { ContractError } from "../ContractError";
+
+declare const ContractError: any;
 
 export async function handle(
   state: LikeState,

@@ -1,8 +1,8 @@
 import path from "path";
 import { initial_state } from "../contracts/LikeContract/initial_state";
-import { ArweaveService } from "../WarpHat/ArweaveServices/ArweaveService";
 import jwk from "../../secrets/UvyEPOcYdrym2izVMwfafecchvTbD8_D_DXaiNq1XO0.json";
-import { ContractDeployer } from "../WarpHat/ContractDeployer/ContractDeployer";
+import { ContractDeployer } from "../WarpHat/Deployer/ContractDeployer";
+import { ArweaveService } from "../WarpHat/Arweave/ArweaveService";
 
 (async () => {
   const contractSrcPath = path.join(

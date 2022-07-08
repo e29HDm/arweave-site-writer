@@ -1,5 +1,5 @@
 import { AbstractContractDeployer } from "./AbstractContractDeployer";
-import { ArweaveService } from "../ArweaveServices/ArweaveService";
+import { ArweaveService } from "../Arweave/ArweaveService";
 
 export class ContractDeployer extends AbstractContractDeployer {
   constructor(arweaveService: ArweaveService) {

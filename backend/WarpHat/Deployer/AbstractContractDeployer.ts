@@ -4,7 +4,7 @@ import { WalletIsUndefinedError } from "../Wallet/WalletIsUndefinedError";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { InitialState } from "../../contracts/InitialState";
 import { Wallet } from "../Wallet/Wallet";
-import { ArweaveService } from "../ArweaveServices/ArweaveService";
+import { ArweaveService } from "../Arweave/ArweaveService";
 
 export class AbstractContractDeployer {
   protected readonly _arweaveService: ArweaveService;

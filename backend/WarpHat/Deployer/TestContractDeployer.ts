@@ -2,8 +2,8 @@ import { AbstractContractDeployer } from "./AbstractContractDeployer";
 import { InitialState } from "../../contracts/InitialState";
 import { Wallet } from "../Wallet/Wallet";
 import { Contract, WarpNodeFactory } from "warp-contracts";
-import { ArweaveService } from "../ArweaveServices/ArweaveService";
 import { JWKInterface } from "arweave/node/lib/wallet";
+import { ArweaveService } from "../Arweave/ArweaveService";
 
 export class TestContractDeployer extends AbstractContractDeployer {
   constructor(arweaveService: ArweaveService) {
@@ -21,7 +21,7 @@ export class TestContractDeployer extends AbstractContractDeployer {
       initialState,
       wallet
     );
-    const contract = await this._warp.contract(contractTxId);
+    const contract = this._warp.contract(contractTxId);
     contract.connect(wallet.jwk as JWKInterface);
     await this._arweaveService.mineBlock();
     return contract;

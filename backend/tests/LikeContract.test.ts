@@ -2,8 +2,8 @@ import { LikeResult, LikeState } from "../contracts/LikeContract/types";
 import { initial_state } from "../contracts/LikeContract/initial_state";
 import { Contract } from "warp-contracts";
 import path from "path";
-import { ArLocalServer } from "../WarpHat/ArweaveServices/ArLocalServer";
-import { ArweaveTestingService } from "../WarpHat/ArweaveServices/ArweaveTestingService";
+import { ArLocalServer } from "../WarpHat/ArLocal/ArLocalServer";
+import { ArweaveTestingService } from "../WarpHat/Arweave/ArweaveTestingService";
 
 describe("Testing the Like Contract", function () {
   const arlocal: ArLocalServer = new ArLocalServer();
@@ -59,7 +59,7 @@ describe("Testing the Like Contract", function () {
       function: "like",
     });
 
-    await testService.mineBlock();
+    await testService.arweaveService.mineBlock();
 
     // likes count should be equal to 1
     ({ result: result } = await contract.viewState({
@@ -82,7 +82,7 @@ describe("Testing the Like Contract", function () {
       function: "dislike",
     });
 
-    await testService.mineBlock();
+    await testService.arweaveService.mineBlock();
 
     // dislike count should be equal to 1
     ({ result: result } = await contract.viewState({
@@ -129,7 +129,7 @@ describe("Testing the Like Contract", function () {
       function: "dislike",
     });
 
-    await testService.mineBlock();
+    await testService.arweaveService.mineBlock();
 
     // likes count should be equal to 3
     ({ result: like_count } = await contract.viewState({
