@@ -8,7 +8,7 @@ import jwk from "../../secrets/UvyEPOcYdrym2izVMwfafecchvTbD8_D_DXaiNq1XO0.json"
     const contractSrcPath = path.join(__dirname, '../../dist-contracts/LikeContract/contract.js')
 
     const arweaveService = new ArweaveService({
-        host: 'arweave.net',
+        host: 'testnet.redstone.tools',
         port: 443,
         protocol: 'https',
     });
@@ -17,5 +17,5 @@ import jwk from "../../secrets/UvyEPOcYdrym2izVMwfafecchvTbD8_D_DXaiNq1XO0.json"
 
     const contractTxId = await deployer.deploy(contractSrcPath, initial_state(), wallet);
 
-    console.log('Deployment on Mainnet completed: ' + contractTxId);
+    console.log('Deployment on Testnet completed: ' + contractTxId);
 })();

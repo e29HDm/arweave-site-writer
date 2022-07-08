@@ -1,12 +1,10 @@
 import ArLocal from "arlocal";
 
-export
-
-class ArLocalServer {
+export class ArLocalServer {
     private server: ArLocal;
 
     constructor() {
-        this.server = new ArLocal(1820, false, undefined, false);
+        this.server = new ArLocal(1984, false, undefined, false);
     }
 
     async start() {
@@ -16,5 +14,4 @@ class ArLocalServer {
     async stop() {
         await this.server.stop();
     }
-
 }

@@ -1,9 +1,9 @@
 import {LikeResult, LikeState} from "../contracts/LikeContract/types";
 import {initial_state} from "../contracts/LikeContract/initial_state";
-import {ArLocalServer} from "./ArweaveTestingService/ArLocalServer";
-import {ArweaveTestingService} from "./ArweaveTestingService/ArweaveTestingService";
 import {Contract} from "warp-contracts";
 import path from "path";
+import {ArLocalServer} from "../WarpHat/ArweaveServices/ArLocalServer";
+import {ArweaveTestingService} from "../WarpHat/ArweaveServices/ArweaveTestingService";
 
 
 describe('Testing the Like Contract', function () {
@@ -15,7 +15,7 @@ describe('Testing the Like Contract', function () {
     beforeAll(async () => {
         await arlocal.start();
         await testService.init();
-        contract = testService.contract;
+        contract = testService.contract as Contract<LikeState>;
     });
 
     afterAll(async () => {
@@ -141,8 +141,8 @@ describe('Testing the Like Contract', function () {
 
     it("should dry write like action", async () => {
         let result: unknown;
-        const newWallet = await testService.arweave.wallets.generate();
-        const overwrittenCaller = await testService.arweave.wallets.jwkToAddress(newWallet);
+        const newWallet = await testService.arweaveService.createWallet()
+        const overwrittenCaller = newWallet.address;
 
         // likes count should be equal to 0
         ({result: result} = (await contract.viewState({
