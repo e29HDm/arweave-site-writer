@@ -1,161 +1,169 @@
-import {LikeResult, LikeState} from "../contracts/LikeContract/types";
-import {initial_state} from "../contracts/LikeContract/initial_state";
-import {Contract} from "warp-contracts";
+import { LikeResult, LikeState } from "../contracts/LikeContract/types";
+import { initial_state } from "../contracts/LikeContract/initial_state";
+import { Contract } from "warp-contracts";
 import path from "path";
-import {ArLocalServer} from "../WarpHat/ArweaveServices/ArLocalServer";
-import {ArweaveTestingService} from "../WarpHat/ArweaveServices/ArweaveTestingService";
+import { ArLocalServer } from "../WarpHat/ArweaveServices/ArLocalServer";
+import { ArweaveTestingService } from "../WarpHat/ArweaveServices/ArweaveTestingService";
 
+describe("Testing the Like Contract", function () {
+  const arlocal: ArLocalServer = new ArLocalServer();
+  const contractSrcPath = path.join(
+    __dirname,
+    "../../dist-contracts/LikeContract/contract.js"
+  );
+  let testService: ArweaveTestingService = new ArweaveTestingService(
+    contractSrcPath,
+    initial_state()
+  );
+  let contract: Contract<LikeState>;
 
-describe('Testing the Like Contract', function () {
-    const arlocal: ArLocalServer = new ArLocalServer();
-    const contractSrcPath = path.join(__dirname, '../../dist-contracts/LikeContract/contract.js');
-    let testService: ArweaveTestingService = new ArweaveTestingService(contractSrcPath, initial_state());
-    let contract: Contract<LikeState>;
+  beforeAll(async () => {
+    await arlocal.start();
+    await testService.init();
+    contract = testService.contract as Contract<LikeState>;
+  });
 
-    beforeAll(async () => {
-        await arlocal.start();
-        await testService.init();
-        contract = testService.contract as Contract<LikeState>;
+  afterAll(async () => {
+    await arlocal.stop();
+  });
+
+  it("should read contract state", async () => {
+    expect((await contract.readState()).state).toEqual(initial_state());
+  });
+
+  it("should read current likes and dislikes counts", async () => {
+    let result: unknown;
+
+    ({ result: result } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(0);
+
+    ({ result: result } = await contract.viewState({
+      function: "get_dislikes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(0);
+  });
+
+  it("should add a like", async () => {
+    let result: unknown;
+
+    // likes count should be equal to 0
+    ({ result: result } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(0);
+
+    // add a like
+    await contract.writeInteraction({
+      function: "like",
     });
 
-    afterAll(async () => {
-        await arlocal.stop();
+    await testService.mineBlock();
+
+    // likes count should be equal to 1
+    ({ result: result } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(1);
+  });
+
+  it("should add a dislike", async () => {
+    let result: unknown;
+
+    // dislike count should be equal to 0
+    ({ result: result } = await contract.viewState({
+      function: "get_dislikes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(0);
+
+    // add a dislike
+    await contract.writeInteraction({
+      function: "dislike",
     });
 
-    it('should read contract state', async () => {
-        expect((await contract.readState()).state).toEqual(initial_state());
+    await testService.mineBlock();
+
+    // dislike count should be equal to 1
+    ({ result: result } = await contract.viewState({
+      function: "get_dislikes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(1);
+  });
+
+  it("should add a dislike and likes", async () => {
+    let like_count: unknown;
+    let dislikes_count: unknown;
+
+    // likes count should be equal to 1
+    ({ result: like_count } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((like_count as LikeResult).count).toEqual(1);
+
+    // dislike count should be equal to 1
+    ({ result: dislikes_count } = await contract.viewState({
+      function: "get_dislikes_count",
+    }));
+    expect((dislikes_count as LikeResult).count).toEqual(1);
+
+    // add 2 like
+    await contract.writeInteraction({
+      function: "like",
     });
 
-    it('should read current likes and dislikes counts', async () => {
-        let result: unknown;
-
-        ({result: result}  = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(0);
-
-        ({result: result} = (await contract.viewState({
-            function: 'get_dislikes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(0);
+    await contract.writeInteraction({
+      function: "like",
     });
 
-    it('should add a like', async () => {
-        let result: unknown;
-
-        // likes count should be equal to 0
-        ({result: result}  = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(0);
-
-        // add a like
-        await contract.writeInteraction({
-            function: 'like',
-        })
-
-        await testService.mineBlock();
-
-        // likes count should be equal to 1
-        ({result: result}  = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(1);
+    // add 3 dislike
+    await contract.writeInteraction({
+      function: "dislike",
     });
 
-    it('should add a dislike', async () => {
-        let result: unknown;
-
-        // dislike count should be equal to 0
-        ({result: result}  = (await contract.viewState({
-            function: 'get_dislikes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(0);
-
-        // add a dislike
-        await contract.writeInteraction({
-            function: 'dislike',
-        })
-
-        await testService.mineBlock();
-
-        // dislike count should be equal to 1
-        ({result: result}  = (await contract.viewState({
-            function: 'get_dislikes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(1);
+    await contract.writeInteraction({
+      function: "dislike",
     });
 
-    it('should add a dislike and likes', async () => {
-        let like_count: unknown;
-        let dislikes_count: unknown;
-
-        // likes count should be equal to 1
-        ({result: like_count}  = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((like_count as LikeResult).count).toEqual(1);
-
-        // dislike count should be equal to 1
-        ({result: dislikes_count}  = (await contract.viewState({
-            function: 'get_dislikes_count',
-        })));
-        expect((dislikes_count as LikeResult).count).toEqual(1);
-
-        // add 2 like
-        await contract.writeInteraction({
-            function: 'like',
-        })
-
-        await contract.writeInteraction({
-            function: 'like',
-        })
-
-        // add 3 dislike
-        await contract.writeInteraction({
-            function: 'dislike',
-        })
-
-        await contract.writeInteraction({
-            function: 'dislike',
-        })
-
-        await contract.writeInteraction({
-            function: 'dislike',
-        })
-
-        await testService.mineBlock();
-
-        // likes count should be equal to 3
-        ({result: like_count}  = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((like_count as LikeResult).count).toEqual(3);
-
-        // dislike count should be equal to 4
-        ({result: dislikes_count}  = (await contract.viewState({
-            function: 'get_dislikes_count',
-        })));
-        expect((dislikes_count as LikeResult).count).toEqual(4);
+    await contract.writeInteraction({
+      function: "dislike",
     });
 
-    it("should dry write like action", async () => {
-        let result: unknown;
-        const newWallet = await testService.arweaveService.createWallet()
-        const overwrittenCaller = newWallet.address;
+    await testService.mineBlock();
 
-        // likes count should be equal to 0
-        ({result: result} = (await contract.viewState({
-            function: 'get_likes_count',
-        })));
-        expect((result as LikeResult).count).toEqual(3);
+    // likes count should be equal to 3
+    ({ result: like_count } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((like_count as LikeResult).count).toEqual(3);
 
-        // add a like dry run
-        const {state: state} = await contract.dryWrite({
-            function: 'like',
-        }, overwrittenCaller);
+    // dislike count should be equal to 4
+    ({ result: dislikes_count } = await contract.viewState({
+      function: "get_dislikes_count",
+    }));
+    expect((dislikes_count as LikeResult).count).toEqual(4);
+  });
 
-        expect(state.likes_count).toEqual(4);
-        expect((await contract.readState()).state.likes_count).toEqual(3);
-    })
+  it("should dry write like action", async () => {
+    let result: unknown;
+    const newWallet = await testService.arweaveService.createWallet();
+    const overwrittenCaller = newWallet.address;
+
+    // likes count should be equal to 0
+    ({ result: result } = await contract.viewState({
+      function: "get_likes_count",
+    }));
+    expect((result as LikeResult).count).toEqual(3);
+
+    // add a like dry run
+    const { state: state } = await contract.dryWrite(
+      {
+        function: "like",
+      },
+      overwrittenCaller
+    );
+
+    expect(state.likes_count).toEqual(4);
+    expect((await contract.readState()).state.likes_count).toEqual(3);
+  });
 });

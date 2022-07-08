@@ -1,23 +1,27 @@
-import {InitialState} from "../InitialState";
+import { InitialState } from "../InitialState";
 
 export interface LikeState extends InitialState {
-    likes_count: number;
-    dislikes_count:number;
+  likes_count: number;
+  dislikes_count: number;
 }
 
 export interface LikeAction {
-    input: LikeInput;
-    caller: string;
+  input: LikeInput;
+  caller: string;
 }
 
 export interface LikeInput {
-    function: LikeFunction;
+  function: LikeFunction;
 }
 
 export interface LikeResult {
-    count: number
+  count: number;
 }
 
-export type LikeFunction = 'like' | 'dislike' | 'get_likes_count' | 'get_dislikes_count';
+export type LikeFunction =
+  | "like"
+  | "dislike"
+  | "get_likes_count"
+  | "get_dislikes_count";
 
 export type ContractResult = { state: LikeState } | { result: LikeResult };

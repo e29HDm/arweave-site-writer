@@ -30,6 +30,7 @@
     "esbuild": "^0.14.48",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
+    "prettier": "2.7.1",
     "replace-in-file": "^6.3.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
